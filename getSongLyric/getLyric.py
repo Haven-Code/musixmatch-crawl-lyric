@@ -34,8 +34,3 @@ def _musixmatch(song):
 
                 if lyrics.strip():
                     return lyrics
-
-
-if __name__ == '__main__':
-    l = _musixmatch('egswthrth')
-    print(l)
