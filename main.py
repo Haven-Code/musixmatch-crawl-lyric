@@ -36,11 +36,15 @@ def _musixmatch(song):
 
                 artisAr = soup.find_all(class_='mxm-track-title__artist-link')
 
-                artists = []
-                for artist in artisAr:
-                    artists.append(artist.text)
+                artises = []
+                for artis in artisAr:
+                    artises.append(artis.text)
 
                 title = soup.find(class_='mxm-track-title__track').text[6:]
 
                 if lyrics.strip():
-                    return lyrics, cover, title, artists
+                    return lyrics, cover, title, artises
+
+
+if __name__ == '__main__':
+    print(_musixmatch("thu cuối"))

@@ -18,14 +18,19 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             name = req_body.get('name')
 
     if name:
-        lyric = getLyric._musixmatch(name)
+        lyric, cover, title, artists = getLyric._musixmatch(name)
 
-        if lyric:
+        if lyric is not None:
             return func.HttpResponse(
                 json.dumps({
                     'success': True,
                     'message': 'Success',
-                    'lyric': lyric
+                    'data': {
+                        'name': title,
+                        'artists': artists,
+                        'cover': cover,
+                        'lyric': lyric
+                    }
                 }),
                 mimetype="application/json",
             )
