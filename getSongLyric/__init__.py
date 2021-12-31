@@ -18,9 +18,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             name = req_body.get('name')
 
     if name:
-        lyric, cover, title, artists = getLyric._musixmatch(name)
+        res = getLyric._musixmatch(name)
 
-        if lyric is not None:
+        if res is not None:
+            lyrics, cover, title, artists = res
+
             return func.HttpResponse(
                 json.dumps({
                     'success': True,
@@ -29,7 +31,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                         'name': title,
                         'artists': artists,
                         'cover': cover,
-                        'lyric': lyric
+                        'lyric': lyrics
                     }
                 }),
                 mimetype="application/json",

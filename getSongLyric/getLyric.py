@@ -11,8 +11,8 @@ def _musixmatch(song):
             if script and script.contents and "__mxmProps" in script.contents[0]:
                 return script.contents[0]
 
-    search_url = "https://www.musixmatch.com/search/%s" % (song.replace(' ', '-'))
-    header = {"User-Agent": "curl/7.9.8 (i686-pc-linux-gnu) libcurl 7.9.8 (OpenSSL 0.9.6b) (ipv6 enabled)"}
+    search_url = "https://www.musixmatch.com/search/%s/tracks" % (song.replace(' ', '-'))
+    header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"}
     search_results = requests.get(search_url, headers=header)
     soup = BeautifulSoup(search_results.text, 'html.parser')
     props = extract_mxm_props(soup)
@@ -40,7 +40,16 @@ def _musixmatch(song):
                 for artist in artisAr:
                     artists.append(artist.text)
 
-                title = soup.find(class_='mxm-track-title__track').text[6:]
+                # title = soup.find(class_='mxm-track-title__track').text[6:]
+                titleEl = soup.find(class_='lyrics-to').text if soup.find(class_='lyrics-to').text is not None else ''
+                titleEl = titleEl.split('by')[0]
+
+                if "The" in titleEl:
+                    title = titleEl[14:]
+                else:
+                    title = titleEl[10:]
+
+                title = title.strip()
 
                 if lyrics.strip():
                     return lyrics, cover, title, artists
