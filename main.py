@@ -1,3 +1,5 @@
+import urllib.parse
+
 from bs4 import BeautifulSoup
 import requests
 import codecs
@@ -11,9 +13,11 @@ def _musixmatch(song):
             if script and script.contents and "__mxmProps" in script.contents[0]:
                 return script.contents[0]
 
-    search_url = "https://www.musixmatch.com/search/%s" % (song.replace(' ', '-'))
+    search_url = "https://www.musixmatch.com/search/%s" % (urllib.parse.quote(song))
+
     header = {"User-Agent": "curl/7.9.8 (i686-pc-linux-gnu) libcurl 7.9.8 (OpenSSL 0.9.6b) (ipv6 enabled)"}
     search_results = requests.get(search_url, headers=header)
+
     soup = BeautifulSoup(search_results.text, 'html.parser')
     props = extract_mxm_props(soup)
 
@@ -47,4 +51,4 @@ def _musixmatch(song):
 
 
 if __name__ == '__main__':
-    print(_musixmatch("thu cuối"))
+    print(_musixmatch("thu cuoi"))

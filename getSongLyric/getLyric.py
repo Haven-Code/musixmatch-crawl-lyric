@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import codecs
 import re
+import urllib.parse
 
 
 def _musixmatch(song):
@@ -11,7 +12,7 @@ def _musixmatch(song):
             if script and script.contents and "__mxmProps" in script.contents[0]:
                 return script.contents[0]
 
-    search_url = "https://www.musixmatch.com/search/%s" % (song.replace(' ', '-'))
+    search_url = "https://www.musixmatch.com/search/%s" % (urllib.parse.quote(song))
     header = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"}
     search_results = requests.get(search_url, headers=header)
     soup = BeautifulSoup(search_results.text, 'html.parser')
